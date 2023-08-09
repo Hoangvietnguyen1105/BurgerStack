@@ -7,7 +7,12 @@ import { Time } from "./template/systems/time/time";
 import { Tween } from "./template/systems/tween/tween";
 import { Application, ElementInput, Keyboard, Mouse, TouchDevice, FILLMODE_FILL_WINDOW, RESOLUTION_AUTO, WasmModule, EVENT_KEYDOWN, KEY_R } from "playcanvas";
 import { PlayScene } from "./gameDesign/scenes/playScene";
-
+import { GameStateManager, GameState } from "./template/gameStateManager";
+import { Configurator } from "./gameDesign/configtor/configtor";
+import { DataLocalEvent, DataLocal } from "./gameDesign/data/dataLocal";
+import { Physics } from "./physics/physics";
+import { DataManager } from "./gameDesign/data/dataManager";
+import { LoadingScene } from "./gameDesign/scenes/loadingScene";
 export class Game {
 
 
@@ -46,23 +51,34 @@ export class Game {
 
   static load() {
     InputManager.init(this.app);
+    GameStateManager.init(GameState.Tutorial);
     Time.init(this.app);
     Tween.init(this.app);
+    Configurator.config(this.app);
+    this.app.on(DataLocalEvent.Initialize, () => {
+      DataManager.init();
+    });
+    DataLocal.init();
+    Physics.init(this.app);
     this.app.start();
-    this.app.on("update", this.update, this);
   }
 
   static create() {
+    this.numberBatch = this.app.batcher.addGroup("Number", true, 1000);
+    this.sphereBatch = this.app.batcher.addGroup("Sphere", true, 100);
     this.gameCreated = true;
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.app.graphicsDevice.maxPixelRatio = window.devicePixelRatio;
     this.app.resizeCanvas(this.width, this.height);
     SceneManager.init([
-      // new SelectScene(),
+      new LoadingScene,
       new PlayScene()
     ]);
     SceneManager.loadScene(SceneManager.getScene(GameConstant.SCENE_PLAY));
+    this.sceneLoading = SceneManager.getScene(GameConstant.SCENE_LOADING);
+    this.scenePlay = SceneManager.getScene(GameConstant.SCENE_PLAY);
+    this.app.on("update", this.update, this);
 
   }
 

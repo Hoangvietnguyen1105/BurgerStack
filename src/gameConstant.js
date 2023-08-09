@@ -3,7 +3,6 @@ export const GameConstant = Object.freeze({
   GAME_HEIGHT: 1280,
   DEBUG_ON: true,
   DEBUG_CAMERA: true,
-  DEBUG_FPS: false,
   DEBUG_COLLIDER: false,
   DEBUG_RAY: false,
 
@@ -21,7 +20,7 @@ export const GameConstant = Object.freeze({
 
   GAME_SPEED: 7.5,
   PLAYER_SPEED: 10.3,
-  PLAYER_START_NUMBER: 2,
+  PLAYER_MODEL: "BurgerTop-BurgerBot",
   PLAYER_START_UPGRADE_NUMBER_MONEY: 200,
   PLAYER_START_UPGRADE_NUMBER_STEP: 1,
   PLAYER_START_INCOME: 1,

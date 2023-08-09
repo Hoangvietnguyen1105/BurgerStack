@@ -3,28 +3,45 @@ import { GameConstant } from "../../gameConstant";
 import { LIGHTTYPE_DIRECTIONAL } from "playcanvas"
 import { Player } from "../obj/player/player";
 import { Util } from "../../helpers/util";
-import { CameraController } from "../../script/controller/cameraController";
-
+import { CameraController } from "../script/controller/cameraController";
+import { PlayScreen } from "../ui/screens/playScreen";
+import { InputHandler } from "../script/input/inputHandler";
+import { DataManager } from "../data/dataManager";
+import { Level } from "../obj/level/level";
+export const PlaySceneEvent = Object.freeze({
+    LevelLoaded: "levelLoaded",
+});
 export class PlayScene extends Scene {
+
     constructor() {
         super(GameConstant.SCENE_PLAY);
     }
     create() {
         super.create();
-        // this.ui.addScreens(
-        //     new PlayScreen()
-        // );
-        // this.screenplay = this.ui.getScreen(GameConstant.SCREEN_PLAY);
-        // this.ui.setScreenActive(GameConstant.SCREEN_PLAY);
+        this.ui.addScreens(
+            new PlayScreen(),
+            // new TutorialScreen(),
+            // new WinScreen(),
+            // new LoseScreen(),
+        );
+        this.playScreen = this.ui.getScreen(GameConstant.SCREEN_PLAY);
+
         this._initialize();
+
+        // This event will be called when the game is completed (win level or something like that).
+        this._registerPlayScreenEvents();
+
     }
     update(dt) {
         super.update(dt);
     }
     _initialize() {
+        //set up event with mouse, keyboard
+        this._initInputHandler()
         this._initLight();
         this._initPlayer();
         this._initCamera();
+        this._initLevel();
         // this._initCameraFollow();
     }
     _initCameraController() {
@@ -89,6 +106,40 @@ export class PlayScene extends Scene {
     _initPlayer() {
         this.player = new Player();
         this.addChild(this.player);
+    }
+    _registerPlayScreenEvents() {
+        this.playScreen.on("playEffectComplete", () => {
+            this.ui.setScreenActive(GameConstant.SCREEN_WIN);
+            this.collectCurrency();
+            this.winScreen.play();
+        });
+    }
+    _initInputHandler() {
+        // set up input handler(mouse, touch, keyboard)
+        let inputHandlerEntity = new pc.Entity("input");
+        this.inputHandler = inputHandlerEntity.addScript(InputHandler);
+        // this.inputHandler.enabled = false;
+        this.addChild(inputHandlerEntity);
+    }
+    _initLevel() {
+        let levelData = DataManager.getLevelData();
+        this.level = new Level();
+        this.addChild(this.level);
+        this.level.config(levelData);
+        this.level.generate(levelData.levelData);
+        this.registerLevelEvents();
+        this._initPlayer();
+
+        this.level.controller = this.level.addScript(LevelController, {
+            player: this.player,
+        });
+        this.playScreen.updateLevelText(DataManager.currentLevel);
+        this.playScreen.updateCurrencyText(Math.ceil(UserData.currency));
+
+        this.updateUserData();
+        console.log(this.player.controller);
+        this.player.controller.updateValue(UserData.startNumber);
+
     }
 
 
