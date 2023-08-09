@@ -65,6 +65,7 @@ export class DataManager {
     this.levelDatas.push(level29);
     this.levelDatas.push(level30);
     this.currentLevel = DataLocal.currentLevel;
+    console.log("currentLevel: " + this.currentLevel);
     UserData.init();
   }
 

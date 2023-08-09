@@ -8,6 +8,10 @@ import { PlayScreen } from "../ui/screens/playScreen";
 import { InputHandler } from "../script/input/inputHandler";
 import { DataManager } from "../data/dataManager";
 import { Level } from "../obj/level/level";
+import { EndWallEvent } from "../obj/obstacles/wall/endWall";
+import { BigBossEvent } from "../obj/boss/bigBoss";
+import { LevelController } from "../script/controller/levelController";
+import { UserData } from "../data/userData";
 export const PlaySceneEvent = Object.freeze({
     LevelLoaded: "levelLoaded",
 });
@@ -123,12 +127,13 @@ export class PlayScene extends Scene {
     }
     _initLevel() {
         let levelData = DataManager.getLevelData();
+        console.log("levelData", levelData)
         this.level = new Level();
         this.addChild(this.level);
         this.level.config(levelData);
         this.level.generate(levelData.levelData);
         this.registerLevelEvents();
-        this._initPlayer();
+        // this._initPlayer();
 
         this.level.controller = this.level.addScript(LevelController, {
             player: this.player,
@@ -138,8 +143,34 @@ export class PlayScene extends Scene {
 
         this.updateUserData();
         console.log(this.player.controller);
-        this.player.controller.updateValue(UserData.startNumber);
+        // this.player.controller.updateValue(UserData.startNumber);
 
+    }
+    registerLevelEvents() {
+        this.level.redDamages.forEach(redDmg => {
+            redDmg.off(RedDamageControllerEvent.Hit, this._onRedDamageDestroy, this);
+            redDmg.once(RedDamageControllerEvent.Hit, this._onRedDamageDestroy, this);
+        })
+        this.level.walls.forEach(wall => {
+            wall.on(EndWallEvent.Break, () => {
+                this.sfxWallBreak.play();
+            });
+        });
+        if (this.level.bigBoss) {
+            this.level.bigBoss.on(BigBossEvent.Break, () => {
+                this.sfxWallImpact.play();
+            });
+        }
+    }
+    updateUserData() {
+        let startNumber = UserData.startNumber;
+        let money = GameConstant.PLAYER_START_UPGRADE_NUMBER_MONEY * (startNumber - GameConstant.PLAYER_START_UPGRADE_NUMBER_STEP);
+        // this.tutorialScreen.updateStartNumberText(startNumber, money);
+
+        let startIncome = UserData.income;
+        let nextIncome = startIncome + GameConstant.PLAYER_START_UPGRADE_INCOME_STEP;
+        let incomeMoney = GameConstant.PLAYER_START_UPGRADE_INCOME_MONEY * ((nextIncome - GameConstant.PLAYER_START_INCOME) * 10);
+        // this.tutorialScreen.updateIncomeText(startIncome, incomeMoney);
     }
 
 

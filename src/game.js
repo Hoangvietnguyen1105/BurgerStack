@@ -75,7 +75,7 @@ export class Game {
       new LoadingScene,
       new PlayScene()
     ]);
-    SceneManager.loadScene(SceneManager.getScene(GameConstant.SCENE_PLAY));
+    SceneManager.loadScene(SceneManager.getScene(GameConstant.SCENE_LOADING));
     this.sceneLoading = SceneManager.getScene(GameConstant.SCENE_LOADING);
     this.scenePlay = SceneManager.getScene(GameConstant.SCENE_PLAY);
     this.app.on("update", this.update, this);

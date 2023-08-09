@@ -27,9 +27,10 @@ export class LoadingScene extends Scene {
   onLoadingCompleted() {
     let scenePlay = SceneManager.getScene(GameConstant.SCENE_PLAY);
     scenePlay.once(PlaySceneEvent.LevelLoaded, () => {
-      this.enabled = false;
-      SceneManager.removeScene(this);
+
     });
+    this.enabled = false;
+    SceneManager.removeScene(this);
     SceneManager.loadSceneAddtive(scenePlay);
     scenePlay.create();
   }

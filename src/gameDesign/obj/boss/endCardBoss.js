@@ -14,7 +14,8 @@ export class EndCardBoss extends Entity {
   }
 
   config(data) {
-    this.value = data.value;
+    // this.value = data.value;
+    this.value = "BurgerTop-BurgerBot"
     this.characterFactory.elements.forEach(element => {
       element.fire(SpawningEvent.Despawn);
     });
@@ -31,7 +32,7 @@ export class EndCardBoss extends Entity {
     this.setLocalPosition(pos.x, pos.y, pos.z);
     this.setLocalEulerAngles(rot.x, rot.y, rot.z);
     this.setLocalScale(scale.x, scale.y, scale.z);
-    this.characterFactory.collider.tag = CollisionTag.Boss;
+    // this.characterFactory.collider.tag = CollisionTag.Boss;
     this.characterFactory.updateMaterial(AssetLoader.getAssetByKey("mat_red_number").resource);
   }
 }

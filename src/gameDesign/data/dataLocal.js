@@ -58,7 +58,7 @@ export class DataLocal {
         this.currentLevel = 1;
         this.addData(GameConstant.INDEXEDDB_CURRENT_LEVEL_KEY, this.currentLevel);
       } else {
-        this.currentLevel = value;
+        this.currentLevel = 1;
       }
       this.checkLoad();
     }).catch((error) => {

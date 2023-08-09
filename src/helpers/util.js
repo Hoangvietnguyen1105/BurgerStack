@@ -5,7 +5,9 @@ export class Util {
   static linear(a, b, percent) {
     return a + (b - a) * percent;
   }
-
+  static formatCash(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
   static easeIn(a, b, percent) {
     return a + (b - a) * percent ** 2;
   }
