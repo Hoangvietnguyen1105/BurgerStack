@@ -12,7 +12,7 @@ export const PlaySceneEvent = Object.freeze({
     LevelLoaded: "levelLoaded",
 });
 export class PlayScene extends Scene {
-
+    //hi
     constructor() {
         super(GameConstant.SCENE_PLAY);
     }
