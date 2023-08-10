@@ -38,6 +38,12 @@ export class AssetConfigurator {
     let texBlue = AssetLoader.getAssetByKey("BurgerTop_texture").resource;
     let matBlue = new StandardMaterial();
     matBlue.diffuseMap = texBlue;
+
+    //define material for burger
+    let texBurger = AssetLoader.getAssetByKey("BurgerTop_texture").resource;
+    let matBurger = new StandardMaterial();
+    matBurger.diffuseMap = texBurger;
+
     AssetLoader.registerAsset(matBlue, "mat_blue_number", "material");
     this.setModelMaterial("model_0", matBlue, 0);
     this.setModelMaterial("model_1", matBlue, 0);
@@ -49,6 +55,9 @@ export class AssetConfigurator {
     this.setModelMaterial("model_7", matBlue, 0);
     this.setModelMaterial("model_8", matBlue, 0);
     this.setModelMaterial("model_9", matBlue, 0);
+    this.setModelMaterial("BurgerBot", matBurger, 0);
+    this.setModelMaterial("BurgerTop", matBurger, 0);
+
   }
 
   static _configWallEndGameMaterial() {

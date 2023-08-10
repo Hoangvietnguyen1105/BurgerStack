@@ -15,7 +15,7 @@ export class Player extends pc.Entity {
         //create number 
         this.character.config({
             value: GameConstant.PLAYER_MODEL, //number start value when render
-            pos: { x: 0, y: 0, z: 0 }, //position of number
+            pos: { x: 0, y: 1, z: 0 }, //position of number
             rot: { x: 0, y: 0, z: 0 }, //rotation of number
             scale: { x: 1, y: 1, z: 1 } //scale of number
         });
